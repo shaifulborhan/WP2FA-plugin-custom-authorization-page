@@ -11,14 +11,17 @@ if( is_plugin_active( 'wp-2fa/wp-2fa.php' ) ) {
 		//instantiate WP2FA Login class to access checker method
 		$login = new WP2FA\Authenticator\Login();
 
-		$url = home_url('/tfa-authorization-code');
-
-		$url = add_query_arg( array(
-			'key' => md5($user_login)
-		), $url);
-
 		//check if user has 2FA enabled
 		if( $login->is_user_using_two_factor( $user->ID ) ) {
+
+			//the WP Page that will host the custom authorization form
+			$url = home_url('/tfa-authorization-code');
+
+			//add the key to identify the transient to the URL query string
+			$url = add_query_arg( array(
+				'key' => md5($user_login)
+			), $url);
+			
 			wp_safe_redirect( $url );
 			exit;
 		}
@@ -33,6 +36,7 @@ if( is_plugin_active( 'wp-2fa/wp-2fa.php' ) ) {
 
 		$url = home_url('/tfa-authorization-code');
 
+		//add the error states to the URL query string
 		$url = add_query_arg( array(
 			'key' => md5($user_login),
 			'tfa' => 'failed',
