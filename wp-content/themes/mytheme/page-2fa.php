@@ -15,6 +15,7 @@ if (isset($_GET['key'])) {
 // redirect away if no auth form
 if (!$auth_form) {
 	wp_safe_redirect(home_url('/'));
+	exit;
 }
 ?>
 
